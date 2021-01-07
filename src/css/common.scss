@@ -1,0 +1,117 @@
+//主颜色
+$color-primary: #409eff;
+
+//辅助色
+$color-info: #909399;
+$color-success: #67c23a;
+$color-warning: #e6a23c;
+$color-danger: #f56c6c;
+
+$color-dark: #232323;
+
+$box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+
+// global transition css
+
+.fade-enter-active,.fade-leave-active {
+  transition: all 0.3s ease;
+}
+.fade-enter{
+  transform: translate3d(-20px,0,0);
+  opacity: 0;
+}
+.fade-leave-to{
+  opacity: 0;
+  transform: translate3d(10px,0,0);
+}
+
+/* breadcrumb transition */
+.breadcrumb-enter-active,
+.breadcrumb-leave-active {
+  transition: all .3s;
+}
+
+.breadcrumb-enter,
+.breadcrumb-leave-active {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.breadcrumb-move {
+  transition: all .5s;
+}
+
+.breadcrumb-leave-active {
+  position: absolute;
+}
+
+
+//修改loading
+.el-loading-mask {
+    background-color: rgba(255,255,255,.5);
+}
+
+
+.main-inner-content {
+    height: 100%;
+
+    .custom-list-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        background-color: #fff;
+
+        .list-search-bar {
+            padding: 0px 5px 5px;
+            box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.22),
+                0 0 2px 0 rgba(0, 0, 0, 0);
+
+            .search-bar-label {
+                display: inline-block;
+                padding: 10px;
+            }
+
+            .search-btn {
+                margin: 0px 5px;
+            }
+
+            .input {
+                margin: 0px 5px;
+                width: 200px;
+            }
+
+            .el-form-item {
+                margin-bottom: 0px;
+            }
+        }
+        .list-content {
+            margin: 5px 0px;
+            padding: 5px 5px;
+            display: flex;
+            font-size: 12px;
+            overflow-y: auto;
+            flex-grow: 10;
+            box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.22),
+                0 0 2px 0 rgba(0, 0, 0, 0);
+            .el-table th.gutter {
+                display: table-cell !important;
+            }
+
+            .row-edit-btn {
+                margin: 2px 2px;
+            }
+        }
+        .list-footer {
+            height: 40px;
+            padding: 5px 5px 0px 5px;
+            background-color: #fff;
+            border-top: 1px solid #ebeef5;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.22),
+                0 0 2px 0 rgba(0, 0, 0, 0);
+            .pager {
+            }
+        }
+    }
+}

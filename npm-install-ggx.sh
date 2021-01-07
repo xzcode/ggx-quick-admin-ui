@@ -1,0 +1,1 @@
+npm install ggx-core-client-ts --save

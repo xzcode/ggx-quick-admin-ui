@@ -1,0 +1,55 @@
+{
+  "name": "ggx-quick-admin-ui",
+  "version": "0.5.0",
+  "publishConfig": {
+    "registry": "http://common.host:8081/repository/npm-releases"
+  },
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "core-js": "^3.6.4",
+    "echarts": "^4.8.0",
+    "element-ui": "^2.14.1",
+    "ggx-http-client": "^0.2.0",
+    "md5": "^2.3.0",
+    "moment": "^2.29.1",
+    "nprogress": "^0.2.0",
+    "screenfull": "^5.0.2",
+    "vue": "^2.6.11",
+    "vue-count-to": "^1.0.13",
+    "vue-moment": "^4.1.0",
+    "vue-property-decorator": "^8.4.2",
+    "vue-router": "^3.1.5",
+    "vuex": "^3.1.3",
+    "wangeditor": "^4.6.0"
+  },
+  "devDependencies": {
+    "@types/echarts": "^4.6.3",
+    "@types/nprogress": "^0.2.0",
+    "@vue/cli-plugin-babel": "~4.2.0",
+    "@vue/cli-plugin-eslint": "^4.4.4",
+    "@vue/cli-plugin-router": "~4.2.0",
+    "@vue/cli-plugin-vuex": "~4.2.0",
+    "@vue/cli-service": "~4.2.0",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/eslint-config-standard": "^5.1.2",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^6.2.2",
+    "postcss": "^7.0.27",
+    "postcss-loader": "^3.0.0",
+    "prettier": "^1.19.1",
+    "sass": "^1.26.2",
+    "sass-loader": "^8.0.2",
+    "vue-cli-plugin-element": "^1.0.1",
+    "vue-template-compiler": "^2.6.11"
+  }
+}
