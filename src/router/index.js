@@ -1,50 +1,25 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
-import store from '@/store';
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import { makeModules, makeStaticRoutes } from './util';
 
 NProgress.configure({ showSpinner: false });
 
 Vue.use(VueRouter);
 
-const modulesFiles = require.context('../views/', true, /routes\/index.js$/);
-const keys = modulesFiles.keys();
-const modules = [];
-let mainModule;
-for (let i = 0; i < keys.length; i++) {
-    const modulePath = keys[i];
-    const value = modulesFiles(modulePath);
-    const module = value.default;
-    if (!module.name) {
-        const pathArr = module.path.split('/');
-        module.name = pathArr[pathArr.length - 1];
-    }
-    if (!module.meta) {
-        module.meta = {};
-    }
-    if (!module.meta.permission) {
-        module.meta.permission = module.name;
-    }
+const modules = makeModules(
+    require.context('../views/', true, /routes\/index.js$/)
+);
+let mainModule = null;
+for (let i = 0; i < modules.length; i++) {
+    const module = modules[i];
     if (module.path === '/main') {
         mainModule = module;
     }
-    modules.push(module);
 }
-export const routeModules = modules;
 
-function makeStaticRoutes(data = []) {
-    const root = [];
-    for (let i = 0; i < data.length; i++) {
-        const per = data[i];
-        if (per.parentPath === '/') {
-            root.push(per);
-            data.splice(i--, 1);
-        }
-    }
-    root.sort((a, b) => a.menuOrder - b.menuOrder);
-    return root;
-}
+export const routeModules = modules;
 
 const staticRoutes = makeStaticRoutes([...modules]);
 staticRoutes.sort((a, b) => a.menuOrder - b.menuOrder);
@@ -66,7 +41,10 @@ export const routes = [
     },
     ...staticRoutes
 ];
-
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(err => console.log(err));
+};
 export const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
@@ -74,6 +52,9 @@ export const router = new VueRouter({
 });
 // 路由前置过滤
 router.beforeEach((to, from, next) => {
+    if (from.path === to.path) {
+        return;
+    }
     // 使用加载进度条工具
     NProgress.start();
     // 继续路由

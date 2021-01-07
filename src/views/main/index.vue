@@ -216,6 +216,7 @@ export default {
         menuSelect(path) {
             if (
                 !this.loginInfo.superAdmin &&
+                this.loginInfo.permissions &&
                 !this.loginInfo.permissions.some(e => e === path)
             ) {
                 return;

@@ -40,7 +40,6 @@ export default {
                     const resp = response.data;
                     if (resp.success) {
                         this.updateLoginStore(resp.data);
-
                         this.$router.push('/main/dashboard');
                     } else {
                         this.$message({
