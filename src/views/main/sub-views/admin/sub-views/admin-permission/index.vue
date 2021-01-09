@@ -461,7 +461,7 @@ export default {
         },
 
         getAllPermissions() {
-            HttpClient.get('/adminpermission/all/permissions')
+            HttpClient.get('/quick/adminpermission/all/permissions')
                 .onstart(e => {
                     this.loading = true;
                 })
@@ -560,7 +560,7 @@ export default {
         },
         edit(data) {
             this.editMode = true;
-            HttpClient.post('/adminpermission/edit', { uid: data.uid })
+            HttpClient.post('/quick/adminpermission/edit', { uid: data.uid })
                 .onstart(e => {
                     this.editFormLoading = true;
                 })
@@ -583,7 +583,7 @@ export default {
                 this.editForm.password = md5(this.editForm.password);
                 this.editFormPwdChanged = false;
             }
-            HttpClient.post('/adminpermission/edit/submit', this.editForm)
+            HttpClient.post('/quick/adminpermission/edit/submit', this.editForm)
                 .onstart(e => {
                     this.editFormLoading = true;
                 })
@@ -607,7 +607,7 @@ export default {
                 this.editForm.password = md5(this.editForm.password);
                 this.editFormPwdChanged = false;
             }
-            HttpClient.post('/adminpermission/add/submit', this.editForm)
+            HttpClient.post('/quick/adminpermission/add/submit', this.editForm)
                 .onstart(e => {
                     this.editFormLoading = true;
                 })
@@ -635,7 +635,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                HttpClient.post('/adminpermission/delete/rows', {
+                HttpClient.post('/quick/adminpermission/delete/rows', {
                     uids: [row.uid]
                 })
                     .onstart(e => {
@@ -657,7 +657,7 @@ export default {
             });
         },
         getPageData() {
-            HttpClient.post('/adminpermission/page', this.queryData)
+            HttpClient.post('/quick/adminpermission/page', this.queryData)
                 .onstart(e => {
                     this.loading = true;
                 })

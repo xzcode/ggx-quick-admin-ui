@@ -11,10 +11,10 @@
                 </el-dropdown-item>
                 <el-dropdown-item
                     icon="el-icon-lock"
-                    command="change-pwd"
+                    command="personal-center"
                     divided
                 >
-                    修改密码
+                    个人中心
                 </el-dropdown-item>
                 <el-dropdown-item
                     icon="el-icon-warning-outline"
@@ -49,14 +49,14 @@ export default {
             switch (cmd) {
                 case 'logout':
                     if (this.authed) {
-                        HttpClient.get('/login/logout').then(e => {
+                        HttpClient.get('/quick/login/logout').then(e => {
                             this.logout();
                         });
                     }
                     this.$router.push('/login');
                     break;
-                case 'change-pwd':
-                    this.$router.push('/main/system-config/update-info');
+                case 'personal-center':
+                    this.$router.push('/main/system-config/personal-center');
                     break;
                 default:
                     this.$message('不支持的选项');

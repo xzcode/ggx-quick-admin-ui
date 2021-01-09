@@ -1,26 +1,32 @@
 <template>
     <div
-        class="aliyun-oss-upload"
+        class="quick-file-service-single-image-upload"
         :style="{ width: width + 'px', height: height + 'px' }"
     >
         <el-upload
-            class="eluploader"
-            ref="eluploader"
-            :action="uploadData.host"
+            class="image-uploader"
+            :action="uploadUrl"
             :show-file-list="false"
             :data="uploadData"
             list-type="picture"
+            name="uploadFile"
             :before-upload="beforeUpload"
             :on-remove="handleRemove"
             :on-success="handleUploadSuccess"
             :on-preview="handlePreview"
-            :file-list="fileList"
-        ></el-upload>
+        >
+            <img v-if="currentUrl" :src="currentUrl" class="image" />
+            <img
+                v-else-if="currentFilename"
+                :src="filesFetchPrefix + currentFilename"
+                class="image"
+            />
+            <i v-else class="el-icon-plus image-uploader-icon"></i>
+        </el-upload>
     </div>
 </template>
 
 <script>
-import { HttpClient } from '@/net';
 import GlobalConfig from '@/config';
 const defaultUploadData = {
     policy: '',
@@ -30,10 +36,9 @@ const defaultUploadData = {
     host: ''
 };
 export default {
-    name: 'aliyun-oss-upload',
     props: {
         onUploadSuccess: Function,
-        currentFileUrl: String,
+        currentFilename: String,
         width: {
             type: Number,
             default: 80
@@ -46,12 +51,14 @@ export default {
     data() {
         return {
             uploadData: { ...defaultUploadData },
+            uploadUrl: GlobalConfig.quickFileServiceUrl + '/files/upload/file',
             fileUrl: null,
             currentUrl: null,
             uploadSuccess: false,
-            fileList: []
+            filesFetchPrefix: GlobalConfig.filesFetchUrl + '/'
         };
     },
+    computed: {},
     mounted() {
         this.currentUrl = null;
     },
@@ -63,44 +70,24 @@ export default {
         handlePreview(file) {
             this.dialogVisible = true;
         },
-        beforeUpload(file) {
-            return new Promise((resolve, reject) => {
-                // 前后端提交post异步请求获取签名信息
-                HttpClient.get(GlobalConfig.aliyunSignServerUrl + '/aliyun/oss/sign')
-                    .then(resp => {
-                        const data = resp.data.data;
-                        this.uploadData.policy = data.policy;
-                        this.uploadData.signature = data.signature;
-                        this.uploadData.ossAccessKeyId = data.ossAccessKeyId;
-                        this.uploadData.key = data.key;
-                        this.uploadData.host = data.host;
-                        this.fileUrl = data.host + '/' + data.key;
-                        resolve(true);
-                    })
-                    .catch(e => {
-                        reject(new Error('Get oss signature fail!'));
-                    });
-            });
-        },
+        beforeUpload(file) {},
         handleUploadSuccess(res, file) {
+            if (!res.success) {
+                this.$message.error(res.message);
+                return;
+            }
+            this.fileUrl =
+                GlobalConfig.quickFilesFetchUrl + '/' + res.data.filename;
             this.uploadSuccess = true;
             this.currentUrl = this.fileUrl;
-            this.onUploadSuccess && this.onUploadSuccess(this.fileUrl);
+            this.onUploadSuccess &&
+                this.onUploadSuccess(res.data.filename, this.fileUrl);
         },
         reset() {
             this.uploadData = { ...defaultUploadData };
             this.fileUrl = null;
             this.currentUrl = null;
             this.uploadSuccess = false;
-        },
-        triggerFileSelector() {
-            this.$refs.eluploader.$children[0].$refs.input.click();
-        },
-        addFile(file){
-            this.fileList.push(file);
-        },
-        submit() {
-            this.$refs.eluploader.submit();
         }
     }
 };
@@ -108,7 +95,8 @@ export default {
 
 <style scoped lang="scss">
 @import '@/css/common.scss';
-.aliyun-oss-upload {
+.quick-file-service-single-image-upload {
+    border: 1px dashed #ccc;
     .image-uploader {
         width: 100%;
         height: 100%;

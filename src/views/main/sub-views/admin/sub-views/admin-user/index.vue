@@ -295,7 +295,7 @@ export default {
             this.getPageData();
         },
         getPageData() {
-            HttpClient.post('/adminuser/page', this.queryData)
+            HttpClient.post('/quick/adminuser/page', this.queryData)
                 .onstart(e => {
                     this.loading = true;
                 })
@@ -351,7 +351,7 @@ export default {
         },
         edit(data) {
             this.editMode = true;
-            HttpClient.post('/adminuser/edit', { uid: data.uid })
+            HttpClient.post('/quick/adminuser/edit', { uid: data.uid })
                 .onstart(e => {
                     this.editFormLoading = true;
                 })
@@ -375,7 +375,7 @@ export default {
                 this.editForm.password = md5(this.editForm.password);
                 this.editFormPwdChanged = false;
             }
-            HttpClient.post('/adminuser/edit/submit', this.editForm)
+            HttpClient.post('/quick/adminuser/edit/submit', this.editForm)
                 .onstart(e => {
                     this.editFormLoading = true;
                 })
@@ -395,7 +395,7 @@ export default {
                 this.editForm.password = md5(this.editForm.password);
                 this.editFormPwdChanged = false;
             }
-            HttpClient.post('/adminuser/add/submit', this.editForm)
+            HttpClient.post('/quick/adminuser/add/submit', this.editForm)
                 .onstart(e => {
                     this.editFormLoading = true;
                 })
@@ -414,7 +414,7 @@ export default {
             this.editFormPwdChanged = true;
         },
         deleteRow(row) {
-            HttpClient.post('/adminuser/delete/rows', { uids: [row.uid] })
+            HttpClient.post('/quick/adminuser/delete/rows', { uids: [row.uid] })
                 .onstart(e => {
                     this.loading = true;
                 })
@@ -429,7 +429,7 @@ export default {
                 });
         },
         getAllRoles() {
-            HttpClient.get('/adminrole/all/roles')
+            HttpClient.get('/quick/adminrole/all/roles')
                 .onstart(e => {
                     this.editFormLoading = true;
                 })

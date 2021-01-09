@@ -41,8 +41,8 @@ const defaultUploadData = {
 export default {
     name: 'aliyun-oss-image-upload',
     props: {
-        'on-upload-success': Function,
-        'current-file-url': String,
+        onUploadSuccess: Function,
+        currentFileUrl: String,
         width: {
             type: Number,
             default: 80
@@ -78,7 +78,7 @@ export default {
         beforeUpload(file) {
             return new Promise((resolve, reject) => {
                 // 前后端提交post异步请求获取签名信息
-                HttpClient.get(GlobalConfig.fileServerUrl + '/aliyun/oss/sign')
+                HttpClient.get(GlobalConfig.aliyunSignServerUrl + '/aliyun/oss/sign')
                     .then(resp => {
                         const data = resp.data.data;
                         this.uploadData.policy = data.policy;

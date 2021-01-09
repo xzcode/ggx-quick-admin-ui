@@ -9,7 +9,7 @@ import { HttpClient } from '@/net';
 import GlobalConfig from '@/config';
 import WangEditor from 'wangeditor';
 export default {
-    name: 'rich-wang-editor',
+    name: 'aliyun-oss-wang-editor',
     components: {},
     props: {
         initContent: String,
@@ -45,9 +45,12 @@ export default {
                 suffix = '.' + file.type.split('/')[1];
             }
             // 前后端提交post异步请求获取签名信息
-            HttpClient.get(GlobalConfig.fileServerUrl + '/aliyun/oss/sign', {
-                suffix
-            }).then(resp => {
+            HttpClient.get(
+                GlobalConfig.aliyunSignServerUrl + '/aliyun/oss/sign',
+                {
+                    suffix
+                }
+            ).then(resp => {
                 const data = resp.data.data;
                 HttpClient.postFormData(
                     data.host,

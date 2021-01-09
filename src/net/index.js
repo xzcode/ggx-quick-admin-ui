@@ -29,6 +29,7 @@ export const HttpClient = GGXHttpClient.create()
         if (!resp) {
             return true;
         }
+        console.log(response);
         if (code === 0) {
             notify.error({
                 title: '连接超时',

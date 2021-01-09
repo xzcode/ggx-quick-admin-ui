@@ -294,7 +294,7 @@ export default {
             this.getPageData();
         },
         getPageData() {
-            HttpClient.post('/adminrole/page', this.queryData)
+            HttpClient.post('/quick/adminrole/page', this.queryData)
                 .onstart(e => {
                     this.loading = true;
                 })
@@ -354,7 +354,7 @@ export default {
         },
         edit(data) {
             this.editMode = true;
-            HttpClient.post('/adminrole/edit', { uid: data.uid })
+            HttpClient.post('/quick/adminrole/edit', { uid: data.uid })
                 .onstart(e => {
                     this.loading = true;
                 })
@@ -373,7 +373,7 @@ export default {
         },
 
         editSubmit() {
-            HttpClient.post('/adminrole/edit/submit', this.editForm)
+            HttpClient.post('/quick/adminrole/edit/submit', this.editForm)
                 .onstart(e => {
                     this.editFormLoading = true;
                 })
@@ -389,7 +389,7 @@ export default {
                 });
         },
         addSubmit() {
-            HttpClient.post('/adminrole/add/submit', this.editForm)
+            HttpClient.post('/quick/adminrole/add/submit', this.editForm)
                 .onstart(e => {
                     this.editFormLoading = true;
                 })
@@ -405,7 +405,7 @@ export default {
                 });
         },
         deleteRow(row) {
-            HttpClient.post('/adminrole/delete/rows', { uids: [row.uid] })
+            HttpClient.post('/quick/adminrole/delete/rows', { uids: [row.uid] })
                 .onstart(e => {
                     this.loading = true;
                 })
@@ -420,7 +420,7 @@ export default {
                 });
         },
         getAllPermissions() {
-            HttpClient.get('/adminpermission/all/permissions')
+            HttpClient.get('/quick/adminpermission/all/permissions')
                 .onstart(e => {
                     this.editFormLoading = true;
                 })

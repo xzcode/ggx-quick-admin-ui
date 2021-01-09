@@ -29,18 +29,19 @@ export default {
                 this.$router.push('/login');
                 return;
             }
-            HttpClient.get('/login/info', { token })
+            let loading = null;
+            HttpClient.get('/quick/login/info', { token })
                 .onstart(e => {
-                    this.loading = true;
+                    loading = this.$loading();
                 })
                 .onend(e => {
-                    this.loading = false;
+                    loading && loading.close();
                 })
                 .then(response => {
                     const resp = response.data;
                     if (resp.success) {
                         this.updateLoginStore(resp.data);
-                        this.$router.push('/main/dashboard');
+                        //this.$router.push('/main/dashboard');
                     } else {
                         this.$message({
                             type: 'error',

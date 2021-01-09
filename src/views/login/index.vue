@@ -80,7 +80,7 @@ export default {
                 return;
             }
 
-            HttpClient.post('/login/submit', {
+            HttpClient.post('/quick/login/submit', {
                 username: this.username,
                 password: md5(this.password)
             })
