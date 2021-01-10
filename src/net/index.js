@@ -17,6 +17,13 @@ export const HttpClient = GGXHttpClient.create()
         }
         return {};
     })
+    .addCancelHandler(e => {})
+    .addTimeoutHandler(e => {
+        message({
+            type: 'error',
+            message: '连接超时'
+        });
+    })
     .setGlobalErrorHandler(e => {
         /*  message({
             type: 'error',
@@ -29,7 +36,6 @@ export const HttpClient = GGXHttpClient.create()
         if (!resp) {
             return true;
         }
-        console.log(response);
         if (code === 0) {
             notify.error({
                 title: '连接超时',
@@ -37,12 +43,7 @@ export const HttpClient = GGXHttpClient.create()
             });
             return false;
         }
-        if (code === 500) {
-            message({
-                type: 'error',
-                message: resp.message
-            });
-        }
+        let showmessage = false;
         // 添加登录失效处理器
         if (!resp.success) {
             if (resp.code === 'LOGIN_EXPIRED') {
@@ -53,15 +54,26 @@ export const HttpClient = GGXHttpClient.create()
                         router.push('/login');
                     }
                 });
+                showmessage = true;
             } else if (resp.code === 'PERMISSION_DENIED403') {
                 MessageBox.alert(resp.message, {
                     confirmButtonText: '确定',
                     callback: action => {}
                 });
+                showmessage = true;
             }
 
             return false;
         }
+        if (!showmessage) {
+            if (code === 500) {
+                message({
+                    type: 'error',
+                    message: resp.message
+                });
+            }
+        }
+
         return true;
     })
     .setServerUrl(config.serverUrl);

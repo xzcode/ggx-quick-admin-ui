@@ -5,7 +5,7 @@
                 <div slot="header" class="clearfix">
                     <span>个人信息</span>
                 </div>
-                <FSImageUpload />
+                <FSImageUpload :on-upload-success="avatarUploadSuccess" />
             </el-card>
 
             <el-card class="box-card activity-info">
@@ -23,12 +23,38 @@
 
 <script>
 import FSImageUpload from '@/components/quick-file-service/quick-file-service-single-image-upload';
+import createNamespacedHelpers from 'vuex';
+import { HttpClient } from '@/net';
+const loginStoreHelper = createNamespacedHelpers('login');
+
 export default {
     components: {
         FSImageUpload
     },
-    created() {},
-    methods: {}
+    created() {
+        return {
+            loading: false
+        };
+    },
+    computed: {
+        ...loginStoreHelper.mapState(['updateAvatar'])
+    },
+    methods: {
+        avatarUploadSuccess(filename, url) {
+            HttpClient.get('/quick/personal/change-avatar', { avatar: url })
+                .onstart(e => {
+                    this.loading = true;
+                })
+                .onend(e => {
+                    this.loading = false;
+                })
+                .then(response => {
+                    if (response.data.success) {
+                        this.updateAvatar(url);
+                    }
+                });
+        }
+    }
 };
 </script>
 

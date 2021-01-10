@@ -55,7 +55,7 @@ export default {
             fileUrl: null,
             currentUrl: null,
             uploadSuccess: false,
-            filesFetchPrefix: GlobalConfig.filesFetchUrl + '/'
+            filesFetchPrefix: GlobalConfig.quickFilesFetchUrl + '/'
         };
     },
     computed: {},

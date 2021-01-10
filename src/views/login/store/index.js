@@ -7,6 +7,9 @@ export default {
         loginInfo: {}
     },
     mutations: {
+        updateAvatar(state, data) {
+            state.loginInfo.avatar = data;
+        },
         updateLoginStore(state, data) {
             state.loginInfo = data;
             state.authed = true;

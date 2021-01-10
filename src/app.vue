@@ -37,16 +37,21 @@ export default {
                 .onend(e => {
                     loading && loading.close();
                 })
+                .ontimeout(e => {
+                    /* if (this.$route.path === '/login') {
+                        localStorage.removeItem(loginTokenKey);
+                        this.$router.push('/login');
+                    } */
+                })
                 .then(response => {
                     const resp = response.data;
                     if (resp.success) {
                         this.updateLoginStore(resp.data);
-                        //this.$router.push('/main/dashboard');
+                        if (this.$route.path === '/login') {
+                            this.$router.push('/main/dashboard');
+                        }
                     } else {
-                        this.$message({
-                            type: 'error',
-                            message: resp.message
-                        });
+                        localStorage.removeItem(loginTokenKey);
                         this.$router.push('/login');
                     }
                     this.loading = false;
