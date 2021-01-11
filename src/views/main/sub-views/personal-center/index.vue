@@ -5,7 +5,13 @@
                 <div slot="header" class="clearfix">
                     <span>个人信息</span>
                 </div>
-                <FSImageUpload :on-upload-success="avatarUploadSuccess" />
+                <div class="center-item">
+                    <FSImageUpload :on-upload-success="avatarUploadSuccess" />
+                </div>
+                <div class="center-item">{{ loginInfo.nickname }}</div>
+                <div class="center-item">
+                    <el-button type="text">修改密码</el-button>
+                </div>
             </el-card>
 
             <el-card class="box-card activity-info">
@@ -23,7 +29,7 @@
 
 <script>
 import FSImageUpload from '@/components/quick-file-service/quick-file-service-single-image-upload';
-import createNamespacedHelpers from 'vuex';
+import { createNamespacedHelpers } from 'vuex';
 import { HttpClient } from '@/net';
 const loginStoreHelper = createNamespacedHelpers('login');
 
@@ -37,9 +43,10 @@ export default {
         };
     },
     computed: {
-        ...loginStoreHelper.mapState(['updateAvatar'])
+        ...loginStoreHelper.mapState(['loginInfo'])
     },
     methods: {
+        ...loginStoreHelper.mapMutations(['updateAvatar']),
         avatarUploadSuccess(filename, url) {
             HttpClient.get('/quick/personal/change-avatar', { avatar: url })
                 .onstart(e => {
@@ -69,6 +76,12 @@ export default {
         max-width: 300px;
         margin: 10px;
         flex-grow: 1;
+
+        .center-item {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0px;
+        }
     }
     .activity-info {
         margin: 10px;
