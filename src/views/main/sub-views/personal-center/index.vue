@@ -6,11 +6,24 @@
                     <span>个人信息</span>
                 </div>
                 <div class="center-item">
-                    <FSImageUpload :on-upload-success="avatarUploadSuccess" />
+                    <FSImageUpload
+                        :on-upload-success="avatarUploadSuccess"
+                        :current-file-url="loginInfo.avatar"
+                    />
                 </div>
-                <div class="center-item">{{ loginInfo.nickname }}</div>
+                <div
+                    class="center-item"
+                    style="font-weight: bold; font-size: 20px; margin-top: 25px;"
+                >
+                    {{ loginInfo.nickname }}
+                </div>
                 <div class="center-item">
-                    <el-button type="text">修改密码</el-button>
+                    <el-button
+                        type="text"
+                        @click="changePasswordFormVisible = true"
+                    >
+                        修改密码
+                    </el-button>
                 </div>
             </el-card>
 
@@ -24,6 +37,87 @@
                 ></el-image>
             </el-card>
         </div>
+        <el-dialog
+            title="修改密码"
+            :modal-append-to-body="false"
+            :append-to-body="true"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            :center="true"
+            :visible.sync="changePasswordFormVisible"
+            @closed="$refs.changePasswordForm.resetFields()"
+            :show-close="!changePasswordFormLoading"
+            width="400px"
+        >
+            <el-form
+                ref="changePasswordForm"
+                :model="changePasswordForm"
+                label-width="100px"
+                size="mini"
+            >
+                <el-form-item
+                    label="旧密码"
+                    prop="oldPassword"
+                    :rules="[
+                        {
+                            required: true,
+                            message: '该项不能空'
+                        }
+                    ]"
+                >
+                    <el-input
+                        type="password"
+                        v-model="changePasswordForm.oldPassword"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item
+                    label="新密码"
+                    prop="newPassword"
+                    :rules="[
+                        {
+                            required: true,
+                            message: '该项不能空'
+                        }
+                    ]"
+                >
+                    <el-input
+                        type="password"
+                        v-model="changePasswordForm.newPassword"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item
+                    label="确认新密码"
+                    prop="confirmNewPassword"
+                    :rules="[
+                        {
+                            required: true,
+                            validator: confirmNewPasswordValidator
+                        }
+                    ]"
+                >
+                    <el-input
+                        type="password"
+                        v-model="changePasswordForm.confirmNewPassword"
+                    ></el-input>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button
+                        :loading="changePasswordFormLoading"
+                        type="primary"
+                        @click="submitChangePwdForm"
+                    >
+                        确定
+                    </el-button>
+                    <el-button
+                        :loading="changePasswordFormLoading"
+                        @click="changePasswordFormVisible = false"
+                    >
+                        取消
+                    </el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
     </div>
 </template>
 
@@ -31,15 +125,19 @@
 import FSImageUpload from '@/components/quick-file-service/quick-file-service-single-image-upload';
 import { createNamespacedHelpers } from 'vuex';
 import { HttpClient } from '@/net';
+import sha from '@/util/sha';
 const loginStoreHelper = createNamespacedHelpers('login');
 
 export default {
     components: {
         FSImageUpload
     },
-    created() {
+    data() {
         return {
-            loading: false
+            loading: false,
+            changePasswordFormVisible: false,
+            changePasswordFormLoading: false,
+            changePasswordForm: {}
         };
     },
     computed: {
@@ -48,7 +146,7 @@ export default {
     methods: {
         ...loginStoreHelper.mapMutations(['updateAvatar']),
         avatarUploadSuccess(filename, url) {
-            HttpClient.get('/quick/personal/change-avatar', { avatar: url })
+            HttpClient.post('/quick/personal/change-avatar', { avatar: url })
                 .onstart(e => {
                     this.loading = true;
                 })
@@ -60,6 +158,48 @@ export default {
                         this.updateAvatar(url);
                     }
                 });
+        },
+        submitChangePwdForm() {
+            this.$refs.changePasswordForm.validate(valid => {
+                if (!valid) {
+                    return false;
+                }
+                HttpClient.post('/quick/personal/change-password', {
+                    oldPassword: sha.sha256(
+                        this.changePasswordForm.oldPassword
+                    ),
+                    newPassword: sha.sha256(this.changePasswordForm.newPassword)
+                })
+                    .onstart(e => {
+                        this.changePasswordFormLoading = true;
+                    })
+                    .onend(e => {
+                        this.changePasswordFormLoading = false;
+                    })
+                    .then(response => {
+                        console.log(response);
+                        const resp = response.data;
+                        if (resp.success) {
+                            this.changePasswordFormVisible = false;
+                            this.$message({
+                                message: '密码修改成功',
+                                type: 'success'
+                            });
+                        } else {
+                            this.$message({
+                                message: '密码修改失败',
+                                type: 'error'
+                            });
+                        }
+                    });
+            });
+        },
+        confirmNewPasswordValidator(rule, value, callback) {
+            if (value !== this.changePasswordForm.newPassword) {
+                callback(new Error('两次输入的密码不一致'));
+            } else {
+                callback();
+            }
         }
     }
 };

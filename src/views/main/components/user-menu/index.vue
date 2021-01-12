@@ -1,10 +1,10 @@
 <template>
     <div class="user-menu">
         <el-dropdown trigger="click" @command="handleCommand">
-            <el-avatar
-                shape="square"
+            <el-image
+                fit="contain"
                 :src="loginInfo.avatar || defaultAvatar"
-            ></el-avatar>
+            ></el-image>
             <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item icon="el-icon-user-solid">
                     {{ loginInfo.nickname }}
@@ -56,7 +56,9 @@ export default {
                     this.$router.push('/login');
                     break;
                 case 'personal-center':
-                    this.$router.push('/main/system-config/personal-center');
+                    if (this.$route.path !== '/main/personal-center') {
+                        this.$router.push('/main/personal-center');
+                    }
                     break;
                 default:
                     this.$message('不支持的选项');
@@ -81,9 +83,10 @@ $header-height: 40px;
     .el-dropdown {
         color: $color-primary;
 
-        .el-avatar {
+        .el-image {
             height: $header-height * 0.8;
             width: $header-height * 0.8;
+            border-radius: 6px;
         }
         .avatar {
             height: 36px;

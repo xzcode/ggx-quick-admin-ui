@@ -4,6 +4,7 @@
         :style="{ width: width + 'px', height: height + 'px' }"
     >
         <el-upload
+            v-loading="loading"
             class="image-uploader"
             :action="uploadUrl"
             :show-file-list="false"
@@ -13,12 +14,18 @@
             :before-upload="beforeUpload"
             :on-remove="handleRemove"
             :on-success="handleUploadSuccess"
+            :on-error="handleUploadError"
             :on-preview="handlePreview"
         >
             <img v-if="currentUrl" :src="currentUrl" class="image" />
             <img
                 v-else-if="currentFilename"
                 :src="filesFetchPrefix + currentFilename"
+                class="image"
+            />
+            <img
+                v-else-if="currentFileUrl"
+                :src="currentFileUrl"
                 class="image"
             />
             <i v-else class="el-icon-plus image-uploader-icon"></i>
@@ -39,6 +46,7 @@ export default {
     props: {
         onUploadSuccess: Function,
         currentFilename: String,
+        currentFileUrl: String,
         width: {
             type: Number,
             default: 80
@@ -50,6 +58,7 @@ export default {
     },
     data() {
         return {
+            loading: false,
             uploadData: { ...defaultUploadData },
             uploadUrl: GlobalConfig.quickFileServiceUrl + '/files/upload/file',
             fileUrl: null,
@@ -70,8 +79,11 @@ export default {
         handlePreview(file) {
             this.dialogVisible = true;
         },
-        beforeUpload(file) {},
+        beforeUpload(file) {
+            this.loading = true;
+        },
         handleUploadSuccess(res, file) {
+            this.loading = false;
             if (!res.success) {
                 this.$message.error(res.message);
                 return;
@@ -82,6 +94,9 @@ export default {
             this.currentUrl = this.fileUrl;
             this.onUploadSuccess &&
                 this.onUploadSuccess(res.data.filename, this.fileUrl);
+        },
+        handleUploadError(e) {
+            this.loading = false;
         },
         reset() {
             this.uploadData = { ...defaultUploadData };

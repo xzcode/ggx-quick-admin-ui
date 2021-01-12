@@ -395,7 +395,7 @@
 </template>
 <script>
 import { defaultPageData } from '@/util/page-data';
-import md5 from 'md5';
+import sha from '@/util/sha';
 import { HttpClient } from '@/net';
 const defaultQueryData = {
     pageSize: 10,
@@ -580,7 +580,7 @@ export default {
 
         editSubmit() {
             if (this.editFormPwdChanged) {
-                this.editForm.password = md5(this.editForm.password);
+                this.editForm.password = sha.sha256(this.editForm.password);
                 this.editFormPwdChanged = false;
             }
             HttpClient.post('/quick/adminpermission/edit/submit', this.editForm)
@@ -604,7 +604,7 @@ export default {
         },
         addSubmit() {
             if (this.editFormPwdChanged) {
-                this.editForm.password = md5(this.editForm.password);
+                this.editForm.password = sha.sha256(this.editForm.password);
                 this.editFormPwdChanged = false;
             }
             HttpClient.post('/quick/adminpermission/add/submit', this.editForm)

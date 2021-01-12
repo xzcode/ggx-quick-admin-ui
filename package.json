@@ -14,7 +14,7 @@
     "echarts": "^4.8.0",
     "element-ui": "^2.14.1",
     "ggx-http-client": "^0.2.0",
-    "md5": "^2.3.0",
+    "js-sha256": "^0.9.0",
     "moment": "^2.29.1",
     "nprogress": "^0.2.0",
     "screenfull": "^5.0.2",

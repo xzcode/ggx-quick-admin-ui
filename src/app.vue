@@ -14,7 +14,61 @@ const loginTokenKey = 'login_token';
 export default {
     components: {},
     methods: {
-        ...loginStoreHelper.mapMutations(['updateLoginStore'])
+        ...loginStoreHelper.mapMutations(['updateLoginStore']),
+        checkLogin() {
+            if (!this.authed) {
+                const token = localStorage.getItem(loginTokenKey);
+                if (!token) {
+                    this.$router.push('/login');
+                    return;
+                }
+                let loading = null;
+                HttpClient.get('/quick/login/info', { token })
+                    .onstart(e => {
+                        loading = this.$loading();
+                    })
+                    .onend(e => {
+                        loading && loading.close();
+                    })
+                    .ontimeout(e => {
+                        /* if (this.$route.path === '/login') {
+                        localStorage.removeItem(loginTokenKey);
+                        this.$router.push('/login');
+                    } */
+                        if (this.$route.path !== '/login') {
+                            this.$confirm(
+                                '登录信息校验超时，是否重试？',
+                                '提示',
+                                {
+                                    confirmButtonText: '重试',
+                                    cancelButtonText: '重新登录',
+                                    type: 'warning'
+                                }
+                            )
+                                .then(() => {
+                                    this.checkLogin();
+                                })
+                                .catch(() => {
+                                    localStorage.removeItem(loginTokenKey);
+                                    this.$router.push('/login');
+                                });
+                        }
+                    })
+                    .then(response => {
+                        const resp = response.data;
+                        if (resp.success) {
+                            this.updateLoginStore(resp.data);
+                            if (this.$route.path === '/login') {
+                                this.$router.push('/main/dashboard');
+                            }
+                        } else {
+                            localStorage.removeItem(loginTokenKey);
+                            this.$router.push('/login');
+                        }
+                        this.loading = false;
+                    });
+            }
+        }
     },
     computed: {
         ...loginStoreHelper.mapState(['authed']),
@@ -23,40 +77,7 @@ export default {
         }
     },
     created() {
-        if (!this.authed) {
-            const token = localStorage.getItem(loginTokenKey);
-            if (!token) {
-                this.$router.push('/login');
-                return;
-            }
-            let loading = null;
-            HttpClient.get('/quick/login/info', { token })
-                .onstart(e => {
-                    loading = this.$loading();
-                })
-                .onend(e => {
-                    loading && loading.close();
-                })
-                .ontimeout(e => {
-                    /* if (this.$route.path === '/login') {
-                        localStorage.removeItem(loginTokenKey);
-                        this.$router.push('/login');
-                    } */
-                })
-                .then(response => {
-                    const resp = response.data;
-                    if (resp.success) {
-                        this.updateLoginStore(resp.data);
-                        if (this.$route.path === '/login') {
-                            this.$router.push('/main/dashboard');
-                        }
-                    } else {
-                        localStorage.removeItem(loginTokenKey);
-                        this.$router.push('/login');
-                    }
-                    this.loading = false;
-                });
-        }
+        this.checkLogin();
     }
 };
 </script>

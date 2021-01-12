@@ -45,7 +45,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
-import md5 from 'md5';
+import sha from '@/util/sha';
 import { HttpClient } from '@/net';
 import BgBlock from '@/components/bg-blocks/index.vue';
 const loginStoreHelper = createNamespacedHelpers('login');
@@ -86,7 +86,7 @@ export default {
 
             HttpClient.post('/quick/login/submit', {
                 username: this.username,
-                password: md5(this.password)
+                password: sha.sha256(this.password)
             })
                 .onstart(e => {
                     this.loading = true;

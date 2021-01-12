@@ -3,7 +3,7 @@ export default {
     path: '/main/developer',
     redirect: '/main/developer/developer-list',
     menuName: '开发者工具',
-    menuIcon: 'el-icon-setting',
+    menuIcon: 'el-icon-cpu',
     isMenu: true,
     menuOrder: 899999
 };
