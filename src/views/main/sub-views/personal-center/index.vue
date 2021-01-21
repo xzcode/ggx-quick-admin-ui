@@ -122,7 +122,7 @@
 </template>
 
 <script>
-import FSImageUpload from '@/components/quick-file-service/quick-file-service-single-image-upload';
+import FSImageUpload from 'quick-admin/components/quick-file-service/quick-file-service-single-image-upload';
 import { createNamespacedHelpers } from 'vuex';
 import { HttpClient } from '@/net';
 import sha from '@/util/sha';

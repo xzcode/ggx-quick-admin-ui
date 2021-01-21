@@ -5,5 +5,5 @@ export default {
     menuIcon: 'el-icon-user',
     isMenu: true,
     menuOrder: 900000,
-    component: () => import('..')
+    component: () => import('../')
 };

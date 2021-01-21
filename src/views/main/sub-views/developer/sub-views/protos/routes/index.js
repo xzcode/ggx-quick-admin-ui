@@ -4,5 +4,5 @@ export default {
     menuName: 'Proto协议',
     menuIcon: 'el-icon-document',
     isMenu: true,
-    component: () => import('..')
+    component: () => import('../')
 };
