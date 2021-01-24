@@ -56,7 +56,7 @@ export const HttpClient = GGXHttpClient.create()
                 });
                 showmessage = true;
                 return false;
-            } else if (resp.code === 'PERMISSION_DENIED403') {
+            } else if (resp.code === 'PERMISSION_DENIED') {
                 MessageBox.alert(resp.message, {
                     confirmButtonText: '确定',
                     callback: action => {}

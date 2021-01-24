@@ -49,8 +49,10 @@
                     stripe
                     height="100%"
                 >
-                    <el-table-column prop="groupId" label="分组id" />
-                    <el-table-column prop="groupName" label="分组名称" />
+                    <el-table-column prop="serviceName" label="服务名称" />
+                    <el-table-column prop="serviceId" label="服务id" />
+                    <el-table-column prop="serviceGroupId" label="分组id" />
+                    <el-table-column prop="serviceGroupName" label="分组名称" />
                     <el-table-column prop="createDate" label="创建时间">
                         <template slot-scope="scope">
                             {{ scope.row.createDate | datetime }}
@@ -111,11 +113,29 @@
             :show-close="!dialogLoading"
             style="min-width:600px"
         >
-            <el-input
-                type="textarea"
-                :autosize="{ minRows: 10 }"
-                :value="showDataText"
-            ></el-input>
+            <el-tabs v-model="activeName">
+                <el-tab-pane label="Proto V2" name="first">
+                    <el-input
+                        type="textarea"
+                        :autosize="{ minRows: 10 }"
+                        :value="showData.protoV2String"
+                    ></el-input>
+                </el-tab-pane>
+                <el-tab-pane label="Proto V3" name="second">
+                    <el-input
+                        type="textarea"
+                        :autosize="{ minRows: 10 }"
+                        :value="showData.protoV3String"
+                    ></el-input>
+                </el-tab-pane>
+                <el-tab-pane label="Proto TypeScript" name="third">
+                    <el-input
+                        type="textarea"
+                        :autosize="{ minRows: 10 }"
+                        :value="showData.protoTypeScriptString"
+                    ></el-input>
+                </el-tab-pane>
+            </el-tabs>
         </el-dialog>
     </div>
 </template>
@@ -137,15 +157,12 @@ export default {
             dialogLoading: false,
             pageData: defaultPageData(),
             queryData: { ...defaultQueryData },
+            activeName: 'first',
             showData: {},
             dialogVisible: false
         };
     },
-    computed: {
-        showDataText() {
-            return JSON.stringify(this.showData.errorCodeItems, null, 2);
-        }
-    },
+    computed: {},
     methods: {
         handleCurrentChange(pageNo) {
             this.queryData.pageNo = pageNo;
@@ -156,7 +173,7 @@ export default {
             this.getPageData();
         },
         getPageData() {
-            HttpClient.post('/quick/developer/errorcode/list', this.queryData)
+            HttpClient.post('/quick/service/monitor/list', this.queryData)
                 .onstart(e => {
                     this.loading = true;
                 })
@@ -183,7 +200,7 @@ export default {
         },
         dialogClosed(e) {},
         deleteRow(row) {
-            HttpClient.post('/quick/developer/errorcode/delete/rows', {
+            HttpClient.post('/quick/service/monitor/delete/rows', {
                 uids: [row.uid]
             })
                 .onstart(e => {
