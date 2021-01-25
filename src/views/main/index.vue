@@ -35,7 +35,7 @@
 
                 <div class="tool-bar">
                     <el-button @click="triggerFullscreen">
-                        <i class="el-icon-rank"></i>
+                        <i class="el-icon-full-screen"></i>
                     </el-button>
                 </div>
             </el-header>

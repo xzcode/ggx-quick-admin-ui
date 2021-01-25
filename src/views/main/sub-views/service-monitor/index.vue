@@ -3,6 +3,22 @@
         <el-container class="custom-list-container" v-loading="loading">
             <div class="list-search-bar">
                 <el-form label-width="80px" :inline="true">
+                    <el-form-item label="服务id">
+                        <el-input
+                            v-model="queryData.serviceId"
+                            size="mini"
+                            class="input"
+                            placeholder="请输入"
+                        />
+                    </el-form-item>
+                    <el-form-item label="服务名称">
+                        <el-input
+                            v-model="queryData.serviceName"
+                            size="mini"
+                            class="input"
+                            placeholder="请输入"
+                        />
+                    </el-form-item>
                     <el-form-item label="分组id">
                         <el-input
                             v-model="queryData.groupId"
@@ -53,7 +69,27 @@
                     <el-table-column prop="serviceId" label="服务id" />
                     <el-table-column prop="serviceGroupId" label="分组id" />
                     <el-table-column prop="serviceGroupName" label="分组名称" />
-                    <el-table-column prop="createDate" label="创建时间">
+                    <el-table-column prop="online" label="是否在线">
+                        <template slot-scope="scope">
+                            <template v-if="scope.row.online">
+                                <el-button
+                                    type="success"
+                                    size="mini"
+                                    icon="el-icon-check"
+                                    circle
+                                ></el-button>
+                            </template>
+                            <template v-else>
+                                <el-button
+                                    type="danger"
+                                    size="mini"
+                                    icon="el-icon-close"
+                                    circle
+                                ></el-button>
+                            </template>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="createDate" label="更新时间">
                         <template slot-scope="scope">
                             {{ scope.row.createDate | datetime }}
                         </template>
@@ -145,6 +181,8 @@ import { HttpClient } from '@/net';
 const defaultQueryData = {
     pageSize: 10,
     pageNo: 1,
+    serviceId: null,
+    serviceName: null,
     groupId: null,
     groupName: null
 };
