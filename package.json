@@ -2,7 +2,7 @@
   "name": "ggx-quick-admin-ui",
   "version": "0.5.0",
   "publishConfig": {
-    "registry": "http://common.com:8081/repository/npm-releases"
+    "registry": "http://common.host:8081/repository/npm-releases"
   },
   "scripts": {
     "serve": "vue-cli-service serve",
