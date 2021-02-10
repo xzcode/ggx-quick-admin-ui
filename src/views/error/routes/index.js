@@ -1,7 +1,7 @@
 const routes = {
     parentPath: '/',
     path: '/error',
-    component: () => import('@/views/error/index.vue')
+    component: () => import('../')
 };
 
 export default routes;

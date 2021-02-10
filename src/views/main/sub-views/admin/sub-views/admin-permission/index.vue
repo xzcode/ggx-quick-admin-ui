@@ -395,7 +395,7 @@
 </template>
 <script>
 import { defaultPageData } from '@/util/page-data';
-import sha from '@/util/sha';
+import sha from 'quick-admin/util/sha';
 import { HttpClient } from '@/net';
 const defaultQueryData = {
     pageSize: 10,

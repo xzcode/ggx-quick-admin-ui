@@ -45,7 +45,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
-import sha from '@/util/sha';
+import sha from 'quick-admin/util/sha';
 import { HttpClient } from '@/net';
 import BgBlock from '@/components/bg-blocks/index.vue';
 const loginStoreHelper = createNamespacedHelpers('login');

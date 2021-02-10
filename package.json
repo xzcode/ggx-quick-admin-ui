@@ -1,6 +1,6 @@
 {
   "name": "ggx-quick-admin-ui",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "publishConfig": {
     "registry": "http://common.host:8081/repository/npm-releases"
   },
