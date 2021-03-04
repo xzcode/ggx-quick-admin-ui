@@ -133,6 +133,13 @@
                         :value="showData.protoTypeScriptString"
                     ></el-input>
                 </el-tab-pane>
+                <el-tab-pane label="Proto Javascript" name="Fourth">
+                    <el-input
+                        type="textarea"
+                        :autosize="{ minRows: 10 }"
+                        :value="showData.protoJavascriptString"
+                    ></el-input>
+                </el-tab-pane>
             </el-tabs>
         </el-dialog>
     </div>
